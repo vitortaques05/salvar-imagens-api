@@ -4,7 +4,6 @@ const fs = require('fs')
 
 const dados = require('./dados.json')
 
-
 const server = express()
 server.use(express.json())
 server.use(cors())
