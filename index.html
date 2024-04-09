@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagens api</title>
+    <title>Exibição de Imagens</title>
+    <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
-    
+    <h1>C A T Á L O G O    D E       H E R O I S</h1>
+    <div id="imagens-container"></div>
+
+    <script>
+        fetch('http://127.0.0.1:3000/imagens')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('imagens-container');
+                data.forEach(imagem => {
+                    const img = document.createElement('img');
+                    img.src = imagem.url;
+                    img.alt = imagem.descricao;
+                    img.addEventListener('click', function() {
+                        alert(imagem.descricao);
+                    });
+                    container.appendChild(img);
+                });
+            })
+            .catch(error => console.error('Erro ao obter dados das imagens:', error));
+    </script>
 </body>
 </html>
