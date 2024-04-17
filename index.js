@@ -23,9 +23,9 @@ server.post('/imagens', (req, res) => {
     if (!novaImagem.url || !novaImagem.descricao) {
         return res.status(400).json({ mensagem: "Dados incompletos, tente novamente" });
     } else {
-        // Adicionar a nova imagem aos dados existentes.
+       
         dados.Imagens.push(novaImagem);
-        // Salvar os dados atualizados.
+       
         salvarDados();
     
         return res.status(201).json({ mensagem: "Dados completos, imagem cadastrada com sucesso" });

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">Início</a>
+        <a href="cadastro.html">Cadastro</a>
+    </div>
+
+    <br> <br> <br> <br>
+     
+    <h1>Formulário De Cadastro</h1>
+    <div class="container">
+        <form id="imageForm" action="#" method="post">
+            <label for="url">URL da Imagem:</label>
+            <input type="text" id="url" name="url" required>
+
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" rows="4" required></textarea>
+
+            <input type="submit" value="FEITO!">
+        </form>
+    </div>
+
+    <script>
+
+        let dataDeRegistro = 0;
+fetch('http://127.0.0.1:3000/imagens')
+    .then(response => response.json())
+    .then(data => {
+        // Aqui você pode acessar os dados retornados pelo servidor
+        console.log(data);
+        dataDeRegistro = data.dataDeRegistro;
+        // Faça o que quiser com os dados, como extrair a data
+        console.log('Data de registro:', dataDeRegistro);
+    })
+    .catch(error => {
+        console.error('Erro ao obter dados do servidor:', error);
+    });
+
+        document.getElementById('imageForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const formData = new FormData(); 
+            const id = dataDeRegistro+1;
+            const url = document.getElementById('url').value;
+            const descricao = document.getElementById('descricao').value;
+
+            fetch('http://127.0.0.1:3000/imagens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id,
+                    url: url,
+                    descricao: descricao,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+           
+            })
+            .catch(error => {
+                console.error('Erro ao enviar dados do formulário:', error);
+                alert('Erro ao enviar dados do formulário. Por favor, tente novamente.');
+            });
+        });
+
+      
+        
+        
+    </script>
+
+</body>
+</html>
