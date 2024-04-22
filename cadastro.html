@@ -10,6 +10,7 @@
     <div class="navbar">
         <a href="index.html">Início</a>
         <a href="cadastro.html">Cadastro</a>
+        <a href="editar.html">Editar</a>
     </div>
 
     <br> <br> <br> <br>
@@ -29,25 +30,26 @@
 
     <script>
 
-        let dataDeRegistro = 0;
-fetch('http://127.0.0.1:3000/imagens')
-    .then(response => response.json())
-    .then(data => {
-        // Aqui você pode acessar os dados retornados pelo servidor
-        console.log(data);
-        dataDeRegistro = data.dataDeRegistro;
-        // Faça o que quiser com os dados, como extrair a data
-        console.log('Data de registro:', dataDeRegistro);
-    })
-    .catch(error => {
-        console.error('Erro ao obter dados do servidor:', error);
-    });
+        let ultimoId = 0;
+        fetch('http://127.0.0.1:3000/imagens')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Verifica se há imagens na resposta
+                if (data.length > 0) {
+                    ultimoId = data[data.length - 1].id;
+                }
+                console.log('Último ID:', ultimoId);
+            })
+            .catch(error => {
+                console.error('Erro ao obter dados do servidor:', error);
+            });
 
         document.getElementById('imageForm').addEventListener('submit', function(event) {
             event.preventDefault(); 
 
             const formData = new FormData(); 
-            const id = dataDeRegistro+1;
+            const id = ultimoId + 1; // Incrementa o último ID
             const url = document.getElementById('url').value;
             const descricao = document.getElementById('descricao').value;
 
@@ -65,7 +67,6 @@ fetch('http://127.0.0.1:3000/imagens')
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-           
             })
             .catch(error => {
                 console.error('Erro ao enviar dados do formulário:', error);
@@ -73,9 +74,6 @@ fetch('http://127.0.0.1:3000/imagens')
             });
         });
 
-      
-        
-        
     </script>
 
 </body>

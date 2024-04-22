@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exibição de Imagens</title>
     <link rel="stylesheet" href="styles.css">
-
+    <!-- Adicione uma biblioteca de ícones, por exemplo, Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     
     <div class="navbar">
         <a href="index.html">Início</a>
         <a href="cadastro.html">Cadastro</a>
+        <a href="editar.html">Editar</a>
     </div>
 
     <br>
 
-    <h1>C A T Á L O G O    D E       H E R O I S</h1>
+    <h1>C A T Á L O G OㅤD EㅤI M A G E N S</h1>
     <div id="imagens-container"></div>
 
     <script>
@@ -25,19 +27,47 @@
             .then(data => {
                 const container = document.getElementById('imagens-container');
                 data.forEach(imagem => {
+                    const imgContainer = document.createElement('div'); // Container para imagem e botão
                     const img = document.createElement('img');
                     img.src = imagem.url;
                     img.alt = imagem.descricao;
+
+                    // Adiciona um evento de clique para exibir a descrição da imagem em um alerta
                     img.addEventListener('click', function() {
                         alert(imagem.descricao);
                     });
-                    container.appendChild(img);
+
+                    const deleteButton = document.createElement('button'); // Botão de deletar
+                    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>'; // Ícone de lixeira
+                    deleteButton.classList.add('delete-button'); // Adiciona uma classe CSS
+
+                    deleteButton.addEventListener('click', function() {
+                        // Confirmação de exclusão
+                        if (confirm(`Tem certeza que deseja excluir a imagem "${imagem.descricao}"?`)) {
+                            fetch(`http://127.0.0.1:3000/imagens/${imagem.id}`, {
+                                method: 'DELETE'
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    // Se a resposta for bem-sucedida, remove o container da imagem
+                                    imgContainer.remove();
+                                    alert('Imagem excluída com sucesso!');
+                                } else {
+                                    // Se a resposta não for bem-sucedida, mostra uma mensagem de erro
+                                    alert('Erro ao excluir imagem!');
+                                }
+                            })
+                            .catch(error => console.error('Erro ao excluir imagem:', error));
+                        }
+                    });
+
+                    // Adiciona a imagem e o botão no container
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(deleteButton);
+                    container.appendChild(imgContainer);
                 });
             })
             .catch(error => console.error('Erro ao obter dados das imagens:', error));
-
-
-            
     </script>
 </body>
 </html>

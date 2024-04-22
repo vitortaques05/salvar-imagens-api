@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Imagem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  
+<div class="navbar">
+    <a href="index.html">Início</a>
+    <a href="cadastro.html">Cadastro</a>
+    <a href="editar.html">Editar</a>
+</div>
+
+<h1>Pesquisa de Imagem</h1>
+
+<div class="container">
+    <label for="description">Descrição:</label>
+    <input type="text" id="description" placeholder="Digite a descrição"><br>
+
+    <button onclick="searchImages()">Pesquisar</button>
+
+    <div id="imagens-container"></div>
+</div>
+
+<p id="response-message"></p>
+
+<script>
+ function searchImages() {
+    const description = document.getElementById('description').value;
+
+    fetch(`http://127.0.0.1:3000/imagens`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados das imagens: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Log the response data for inspection
+
+            const container = document.getElementById('imagens-container');
+            container.innerHTML = ''; // limpa os valores anteriores :)))
+
+            if (!Array.isArray(data)) {
+                console.warn('A resposta não é uma matriz de imagens. Verifique o formato dos dados.');
+                return;
+            }
+
+            data.forEach(imagem => {
+                if (!imagem || typeof imagem !== 'object') {
+                    console.warn('Uma entrada na matriz de imagens não é um objeto válido:', imagem);
+                    return;
+                }
+
+                if (!imagem.url || !imagem.descricao) {
+                    console.warn('Uma entrada na matriz de imagens está faltando URL ou descrição:', imagem);
+                    return;
+                }
+
+                if (imagem.descricao.toLowerCase().includes(description.toLowerCase())) {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.innerHTML = `
+                        <img src="${imagem.url}" alt="${imagem.descricao}">
+                        <p>ID: ${imagem.id}</p>
+                        <p>Descrição: ${imagem.descricao}</p>
+                        <button onclick="editImage(${imagem.id})">Editar</button>
+                        <hr>
+                    `;
+                    container.appendChild(imgDiv);
+                }
+            });
+
+            if (container.innerHTML === '') {
+                document.getElementById('response-message').textContent = 'Nenhuma imagem encontrada com essa descrição.';
+            } else {
+                document.getElementById('response-message').textContent = '';
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById('response-message').textContent = 'Erro ao obter dados das imagens. Verifique o console para mais detalhes.';
+        });
+}
+
+function editImage(imageId) {
+    const newUrl = prompt('Digite a nova URL da imagem:');
+    const newDescription = prompt('Digite a nova descrição da imagem:');
+
+    if (newUrl !== null && newDescription !== null) {
+        const requestBody = {
+            url: newUrl,
+            descricao: newDescription
+        };
+
+        fetch(`http://127.0.0.1:3000/imagens/${imageId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Imagem editada com sucesso.');
+                // After editing the image, refresh the search results
+                searchImages();
+            } else {
+                throw new Error('Erro ao editar imagem.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao editar imagem:', error);
+            alert('Erro ao editar imagem. Verifique o console para mais detalhes.');
+        });
+    }
+}
+</script>
+</body>
+</html>
