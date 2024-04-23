@@ -64,6 +64,11 @@
       "id": 13,
       "url": "https://live-production.wcms.abc-cdn.net.au/848926d957043a97760a84ab8dc5d2b6?impolicy=wcms_crop_resize&cropH=507&cropW=761&xPos=0&yPos=369&width=862&height=575",
       "descricao": "xi jinping"
+    },
+    {
+      "id": 14,
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Mazzaropi-Am%C3%A1cio.jpg",
+      "descricao": "mazaropi"
     }
   ]
 }

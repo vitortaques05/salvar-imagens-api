@@ -1,0 +1,132 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API de Gerenciamento de Imagens",
+      "version": "1.0.0",
+      "description": "API para CRUD de imagens"
+    },
+    "paths": {
+      "/imagens": {
+        "get": {
+          "summary": "Obter todas as imagens",
+          "responses": {
+            "200": {
+              "description": "Lista de imagens retornada com sucesso"
+            }
+          }
+        },
+        "post": {
+          "summary": "Criar uma nova imagem",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Imagem"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Imagem criada com sucesso"
+            },
+            "400": {
+              "description": "Dados inválidos fornecidos"
+            }
+          }
+        }
+      },
+      "/imagens/{id}": {
+        "get": {
+          "summary": "Obter informações de uma imagem pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Informações da imagem retornadas com sucesso"
+            },
+            "404": {
+              "description": "Imagem não encontrada"
+            }
+          }
+        },
+        "put": {
+          "summary": "Atualizar informações de uma imagem pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Imagem"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Informações da imagem atualizadas com sucesso"
+            },
+            "404": {
+              "description": "Imagem não encontrada"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Excluir uma imagem pelo ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Imagem excluída com sucesso"
+            },
+            "404": {
+              "description": "Imagem não encontrada"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Imagem": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "descricao": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+  

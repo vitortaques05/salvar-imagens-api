@@ -2,9 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 
+const server = express();
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+server.use(express.json());
+server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 const dados = require('./dados.json');
 
-const server = express();
+
 server.use(express.json());
 server.use(cors());
 
